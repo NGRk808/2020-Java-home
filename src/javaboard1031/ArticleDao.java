@@ -1,3 +1,4 @@
+//
 package javaboard1031;
 
 import java.text.SimpleDateFormat;
@@ -7,6 +8,8 @@ import java.util.Date;
 public class ArticleDao {
 	private ArrayList<Article> articles = new ArrayList<>();
 	private ArrayList<Reply> replies = new ArrayList<>();
+	private ArrayList<Like> likes = new ArrayList<>();
+	
 	int id = 4;
 	
 	public String getCurrentDate() {
@@ -18,13 +21,43 @@ public class ArticleDao {
 	
 	public void init() {
 		
-		Article a1 = new Article(1, "안녕하세요", "내용1", getCurrentDate(), 0, "홍길동");
-		Article a2 = new Article(2, "반갑습니다", "내용2", getCurrentDate(), 0, "홍길동");
-		Article a3 = new Article(3, "안녕2", "내용3", getCurrentDate(), 0, "이순신");  
+		Article a1 = new Article(1, "안녕하세요", "내용1", getCurrentDate(), 40, "홍길동", "test");
+		Article a2 = new Article(2, "반갑습니다", "내용2", getCurrentDate(), 20, "홍길동", "test");
+		Article a3 = new Article(3, "안녕2", "내용3", getCurrentDate(), 10, "이순신", "test");  
 		
 		articles.add(a1);
 		articles.add(a2);
 		articles.add(a3);
+	}
+	
+	public int getLikeCountByParentId(int parentId) {
+		int cnt = 0;
+		for(int i = 0; i < likes.size(); i++) {
+			if(likes.get(i).getParentId() == parentId) {
+				cnt++;
+			}
+		}
+		
+		return cnt;
+	}
+	
+	public Like getLikeByParentIdAndMemberLoginId(int parentId, String memberLoginId) {
+		for(int i = 0; i < likes.size(); i++) {
+			if(likes.get(i).getParentId() == parentId && likes.get(i).getCheckMemberId().equals(memberLoginId)) {
+				return likes.get(i);
+			}
+		}
+		
+		return null;
+	}
+	
+	public void removeLike(Like like) {
+		likes.remove(like);
+	}
+	
+	public void addLike(Like like) {
+		like.setRegDate(getCurrentDate());
+		likes.add(like);
 	}
 	
 	public void addReply(Reply reply) {
